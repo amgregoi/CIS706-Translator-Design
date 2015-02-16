@@ -19,11 +19,23 @@ public interface ExtendedStaticJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitVoidType(@NotNull ExtendedStaticJavaParser.VoidTypeContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#fieldAccessExp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFieldAccessExp(@NotNull ExtendedStaticJavaParser.FieldAccessExpContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#methodDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitMethodDeclaration(@NotNull ExtendedStaticJavaParser.MethodDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#publicFieldDefinition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitPublicFieldDefinition(@NotNull ExtendedStaticJavaParser.PublicFieldDefinitionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#mainMethodDeclaration}.
 	 * @param ctx the parse tree
@@ -37,18 +49,23 @@ public interface ExtendedStaticJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMethodBody(@NotNull ExtendedStaticJavaParser.MethodBodyContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code InvokeExp}
-	 * labeled alternative in {@link ExtendedStaticJavaParser#exp}.
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#arrayInit}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitInvokeExp(@NotNull ExtendedStaticJavaParser.InvokeExpContext ctx);
+	T visitArrayInit(@NotNull ExtendedStaticJavaParser.ArrayInitContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#localDeclaration}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitLocalDeclaration(@NotNull ExtendedStaticJavaParser.LocalDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#unaryOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryOp(@NotNull ExtendedStaticJavaParser.UnaryOpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#invoke}.
 	 * @param ctx the parse tree
@@ -62,46 +79,42 @@ public interface ExtendedStaticJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitReturnStatement(@NotNull ExtendedStaticJavaParser.ReturnStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code BinaryExp}
-	 * labeled alternative in {@link ExtendedStaticJavaParser#exp}.
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#varRef}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBinaryExp(@NotNull ExtendedStaticJavaParser.BinaryExpContext ctx);
+	T visitVarRef(@NotNull ExtendedStaticJavaParser.VarRefContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#type}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitType(@NotNull ExtendedStaticJavaParser.TypeContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code IntType}
-	 * labeled alternative in {@link ExtendedStaticJavaParser#type}.
+	 * labeled alternative in {@link ExtendedStaticJavaParser#basicType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitIntType(@NotNull ExtendedStaticJavaParser.IntTypeContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code FalseLiteral}
-	 * labeled alternative in {@link ExtendedStaticJavaParser#exp}.
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#literalExp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitFalseLiteral(@NotNull ExtendedStaticJavaParser.FalseLiteralContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code IdExp}
-	 * labeled alternative in {@link ExtendedStaticJavaParser#exp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitIdExp(@NotNull ExtendedStaticJavaParser.IdExpContext ctx);
-	/**
-	 * Visit a parse tree produced by the {@code TrueLiteral}
-	 * labeled alternative in {@link ExtendedStaticJavaParser#exp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTrueLiteral(@NotNull ExtendedStaticJavaParser.TrueLiteralContext ctx);
+	T visitLiteralExp(@NotNull ExtendedStaticJavaParser.LiteralExpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#param}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParam(@NotNull ExtendedStaticJavaParser.ParamContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#forInits}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForInits(@NotNull ExtendedStaticJavaParser.ForInitsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#statement}.
 	 * @param ctx the parse tree
@@ -116,12 +129,17 @@ public interface ExtendedStaticJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitNonVoidReturnType(@NotNull ExtendedStaticJavaParser.NonVoidReturnTypeContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code IntLiteral}
-	 * labeled alternative in {@link ExtendedStaticJavaParser#exp}.
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#doWhileStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitIntLiteral(@NotNull ExtendedStaticJavaParser.IntLiteralContext ctx);
+	T visitDoWhileStatement(@NotNull ExtendedStaticJavaParser.DoWhileStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitExp(@NotNull ExtendedStaticJavaParser.ExpContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#invokeExpStatement}.
 	 * @param ctx the parse tree
@@ -129,14 +147,38 @@ public interface ExtendedStaticJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitInvokeExpStatement(@NotNull ExtendedStaticJavaParser.InvokeExpStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#booleanLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBooleanLiteral(@NotNull ExtendedStaticJavaParser.BooleanLiteralContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#classDefinition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitClassDefinition(@NotNull ExtendedStaticJavaParser.ClassDefinitionContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#binaryOp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryOp(@NotNull ExtendedStaticJavaParser.BinaryOpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#binaryExp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryExp(@NotNull ExtendedStaticJavaParser.BinaryExpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#newExp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNewExp(@NotNull ExtendedStaticJavaParser.NewExpContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code BooleanType}
-	 * labeled alternative in {@link ExtendedStaticJavaParser#type}.
+	 * labeled alternative in {@link ExtendedStaticJavaParser#basicType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
@@ -148,17 +190,41 @@ public interface ExtendedStaticJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFieldDeclaration(@NotNull ExtendedStaticJavaParser.FieldDeclarationContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#forStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForStatement(@NotNull ExtendedStaticJavaParser.ForStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#simpleClassDefinition}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSimpleClassDefinition(@NotNull ExtendedStaticJavaParser.SimpleClassDefinitionContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#ifStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitIfStatement(@NotNull ExtendedStaticJavaParser.IfStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#invokeExp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitInvokeExp(@NotNull ExtendedStaticJavaParser.InvokeExpContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#params}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitParams(@NotNull ExtendedStaticJavaParser.ParamsContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#incDec}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIncDec(@NotNull ExtendedStaticJavaParser.IncDecContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#whileStatement}.
 	 * @param ctx the parse tree
@@ -178,12 +244,29 @@ public interface ExtendedStaticJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCompilationUnit(@NotNull ExtendedStaticJavaParser.CompilationUnitContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code ParenExp}
-	 * labeled alternative in {@link ExtendedStaticJavaParser#exp}.
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#condExp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParenExp(@NotNull ExtendedStaticJavaParser.ParenExpContext ctx);
+	T visitCondExp(@NotNull ExtendedStaticJavaParser.CondExpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#forUpdates}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForUpdates(@NotNull ExtendedStaticJavaParser.ForUpdatesContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#unaryExp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitUnaryExp(@NotNull ExtendedStaticJavaParser.UnaryExpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#lhs}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitLhs(@NotNull ExtendedStaticJavaParser.LhsContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#assignStatement}.
 	 * @param ctx the parse tree
@@ -191,17 +274,33 @@ public interface ExtendedStaticJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAssignStatement(@NotNull ExtendedStaticJavaParser.AssignStatementContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code UnaryExp}
-	 * labeled alternative in {@link ExtendedStaticJavaParser#exp}.
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#parenExp}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitUnaryExp(@NotNull ExtendedStaticJavaParser.UnaryExpContext ctx);
+	T visitParenExp(@NotNull ExtendedStaticJavaParser.ParenExpContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code NullLiteral}
-	 * labeled alternative in {@link ExtendedStaticJavaParser#exp}.
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#incDecStatement}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitNullLiteral(@NotNull ExtendedStaticJavaParser.NullLiteralContext ctx);
+	T visitIncDecStatement(@NotNull ExtendedStaticJavaParser.IncDecStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#arrayAccessExp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitArrayAccessExp(@NotNull ExtendedStaticJavaParser.ArrayAccessExpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#fieldOrMethodDeclaration}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFieldOrMethodDeclaration(@NotNull ExtendedStaticJavaParser.FieldOrMethodDeclarationContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#assign}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAssign(@NotNull ExtendedStaticJavaParser.AssignContext ctx);
 }

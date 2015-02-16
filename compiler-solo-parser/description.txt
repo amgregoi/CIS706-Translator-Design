@@ -13,8 +13,8 @@ Static Java, and // indicates comment).
 
 // Requirement 1: allows simple class declarations before and after main 
 // class declaration
-*** <program> ::= <simple-class-declaration>* 
-                  <class-declaration> 
+*** <program> ::= <simple-class-declaration>*
+                  <class-declaration>
                   <simple-class-declaration>*
 
 // Requirement 2: simple declaration can have zero or more public field 

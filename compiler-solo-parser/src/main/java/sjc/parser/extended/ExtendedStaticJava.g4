@@ -1,7 +1,7 @@
 grammar ExtendedStaticJava;
 
 compilationUnit
-  : classDefinition EOF
+  : simpleClassDefinition* classDefinition simpleClassDefinition* EOF
   ;
 
 classDefinition
@@ -10,13 +10,25 @@ classDefinition
     ( fieldDeclaration | methodDeclaration )*
     '}'
   ;
+  
+  simpleClassDefinition
+  : 'class' ID '{' publicFieldDefinition* '}'
+  ;
+  
+  publicFieldDefinition
+  : 'public' type ID ';'
+  ;
 
 mainMethodDeclaration
   : 'public' 'static' 'void'
     id1=ID                   { "main".equals($id1.text) }? 
     '(' id2=ID               { "String".equals($id2.text) }?
-    '[' ']' id3=ID ')'
+    '[' ']' id3=ID ')'	
     '{' methodBody '}'
+  ;
+  
+  fieldOrMethodDeclaration
+  : fieldDeclaration | methodDeclaration
   ;
   
 fieldDeclaration
@@ -28,6 +40,10 @@ methodDeclaration
   ;
   
 type
+: ( basicType | ID ) ( '[' ']' )?
+;
+  
+basicType
   : 'boolean'                #BooleanType
   | 'int'                    #IntType
   ;
@@ -59,16 +75,19 @@ statement
     | whileStatement
     | invokeExpStatement
     | returnStatement
+    | forStatement
+    | doWhileStatement
+    | incDecStatement
     )
   ;
   
 assignStatement
-  : ID '=' exp ';'
+  : assign ';'
   ;
   
 ifStatement
-  : 'if' '(' exp ')' '{' ts+=statement* '}'
-    ( 'else' '{' fs+=statement* '}' )?
+  : 'if' '(' exp ')' '{' statement* '}'
+    ( 'else' '{' statement* '}' )?
   ;
   
 whileStatement
@@ -76,55 +95,136 @@ whileStatement
   ;
   
 invokeExpStatement
-  : invoke ';'
+  : invokeExp ';'
   ;
   
 returnStatement
-  : 'return' ( exp )? ';'
+  : 'return' exp? ';'
   ;
-
+  
+incDecStatement
+  : incDec ';'
+  ;
+  
+assign
+  : lhs '=' exp
+  ;
+  
+lhs
+  : ID 
+  | exp '.' ID
+  | exp '[' exp ']'
+  ;
+  
+forStatement
+  : 'for' '(' forInits? ';' exp? ';' forUpdates? ')' '{' statement* '}'
+  ;
+  
+forInits
+  : assign ( ',' assign )*
+  ;
+  
+forUpdates
+  : incDec ( ',' incDec )*
+  ;
+  
+incDec
+  : lhs '++' | lhs '--'
+  ;
+  
+doWhileStatement
+  : 'do' '{' statement* '}' 'while' '(' exp ')' ';'
+  ;
+  
 exp
-  : INT                      { new java.math.BigInteger($INT.text).bitLength() < 32 }? 
-                             #IntLiteral
-  | 'true'                   #TrueLiteral 
-  | 'false'                  #FalseLiteral
-  | 'null'                   #NullLiteral
-  | '(' exp ')'              #ParenExp
-  | invoke                   #InvokeExp
-  | ID                       #IdExp
-  | op=( '-' | '+' ) exp     #UnaryExp
-  | op='!' exp               #UnaryExp
-  | e1=exp 
-    op=( '*' | '/' | '%' )
-    e2=exp                   #BinaryExp
-  | e1=exp 
-    op=( '+' | '-' )
-    e2=exp                   #BinaryExp
-  | e1=exp 
-    op=( '<' | '>' | '<=' | '>=' )
-    e2=exp                   #BinaryExp
-  | e1=exp 
-    op=( '==' | '!=' )
-    e2=exp                   #BinaryExp
-  | e1=exp op='&&' e2=exp    #BinaryExp
-  | e1=exp op='||' e2=exp    #BinaryExp
+  : literalExp
+  | unaryExp
+  | exp binaryExp
+  | parenExp
+  | invokeExp
+  | varRef
+  | newExp
+  | exp arrayAccessExp
+  | exp fieldAccessExp
+  | exp condExp
   ;
-
-invoke
-  : ( id1=ID '.' )? id2=ID '(' args? ')'
+  
+literalExp
+  : booleanLiteral
+  | NUM	{ new java.math.BigInteger($NUM.text).bitLength() < 32 }?
+  | 'null'
+  ;
+  
+booleanLiteral
+  : 'true' | 'false'
+  ;
+  
+unaryExp
+  : unaryOp exp
+  ;
+  
+unaryOp
+  : '+' | '-' | '!' | '~'
+  ;
+  
+binaryExp
+  : binaryOp exp
+  ;
+  
+binaryOp
+  : '+' | '-' | '*' | '/' | '%' | '>' | '>=' | '==' 
+  | '<' | '<=' | '!=' | '&&' | '||' | '<<' | '>>' | '>>>'
+  ;
+  
+parenExp
+  : '(' exp ')'
+  ;
+  
+invokeExp
+  : ( ID '.' )? ID '(' args? ')'
   ;
   
 args
   : exp ( ',' exp )*
   ;
-
-ID
-  : ( 'a'..'z' | 'A'..'Z' | '_' | '$' ) 
-    ( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9' | '$' )*
+  
+varRef
+  : ID
   ;
   
-INT
-  : '0' | ('1'..'9') ('0'..'9')*
+condExp
+  : '?' exp ':' exp
+  ;
+  
+newExp
+  : 'new' ID '(' ')'
+  | 'new' type '[' exp ']'
+  | 'new' type '[' ']' arrayInit
+  ;
+ 
+arrayInit
+  : '{' exp ( ',' exp )* '}'
+  ;
+  
+fieldAccessExp
+  : '.' ID
+  ;
+  
+arrayAccessExp
+  : '[' exp ']'
+  ;
+  
+ID
+:( 'a'..'z' | 'A'..'Z' | '_' | '$' ) ( 'a'..'z' | 'A'..'Z' | '_' | '0'..'9' | '$' )*
+;
+
+NUM
+: '0' | ('1'..'9') ('0'..'9')* 
+;
+
+
+invoke
+  : (ID '.' )? ID '(' args? ')'
   ;
 
 // Whitespace -- ignored
@@ -136,3 +236,5 @@ WS
 ERROR
   : .
   ;
+  
+ 
