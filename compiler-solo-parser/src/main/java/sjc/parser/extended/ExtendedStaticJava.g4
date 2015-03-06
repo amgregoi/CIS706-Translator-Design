@@ -1,21 +1,21 @@
 grammar ExtendedStaticJava;
 
 compilationUnit
-  : simpleClassDefinition* classDefinition simpleClassDefinition* EOF
+  : scd1+=simpleClassDeclaration* classDefinition scd2+=simpleClassDeclaration* EOF
   ;
 
 classDefinition
   : 'public' 'class' ID '{' 
     mainMethodDeclaration
-    ( fieldDeclaration | methodDeclaration )*
+    ( fieldOrMethodDeclaration )*
     '}'
   ;
   
-  simpleClassDefinition
-  : 'class' ID '{' publicFieldDefinition* '}'
+  simpleClassDeclaration
+  : 'class' ID '{' publicFieldDeclaration* '}'
   ;
   
-  publicFieldDefinition
+  publicFieldDeclaration
   : 'public' type ID ';'
   ;
 
@@ -40,12 +40,12 @@ methodDeclaration
   ;
   
 type
-: ( basicType | ID ) ( '[' ']' )?
+: ( t1=basicType | t2=ID ) ( arr='[' ']' )?
 ;
   
 basicType
-  : 'boolean'                #BooleanType
-  | 'int'                    #IntType
+  : t1='boolean'                #BooleanType
+  | t2='int'                    #IntType
   ;
   
 returnType
@@ -86,8 +86,8 @@ assignStatement
   ;
   
 ifStatement
-  : 'if' '(' exp ')' '{' statement* '}'
-    ( 'else' '{' statement* '}' )?
+  : 'if' '(' exp ')' '{' ts+=statement* '}'
+    ( 'else' '{' fs+=statement* '}' )?
   ;
   
 whileStatement
@@ -111,13 +111,13 @@ assign
   ;
   
 lhs
-  : ID 
-  | exp '.' ID
-  | exp '[' exp ']'
+  : ID 								#IDExp
+  | exp '.' ID						#fieldAccess
+  | arr=exp '[' index=exp ']'		#arrayAccess
   ;
   
 forStatement
-  : 'for' '(' forInits? ';' exp? ';' forUpdates? ')' '{' statement* '}'
+  : 'for' '(' forInits? ';' e1=exp? ';' forUpdates? ')' '{' statement* '}'
   ;
   
 forInits
@@ -129,7 +129,8 @@ forUpdates
   ;
   
 incDec
-  : lhs '++' | lhs '--'
+  : lhs op='++' 
+  | lhs '--'
   ;
   
 doWhileStatement
@@ -137,30 +138,31 @@ doWhileStatement
   ;
   
 exp
-  : literalExp
-  | unaryExp
-  | exp binaryExp
-  | parenExp
-  | invokeExp
-  | varRef
-  | newExp
-  | exp arrayAccessExp
-  | exp fieldAccessExp
-  | exp condExp
+  : literalExp					#LitExpr
+  | unaryExp					#UnaryExpr
+  | exp binaryExp			#BinaryExpr
+  | parenExp					#ParenExpr
+  | invokeExp					#InvokeExpr
+  | varRef						#VarRefr
+  | newExp						#NewExpr
+  | exp arrayAccessExp			#ArrayAccessr
+  | exp fieldAccessExp			#FieldAccessr
+  | exp condExp					#CondExpr
   ;
   
 literalExp
-  : booleanLiteral
-  | NUM	{ new java.math.BigInteger($NUM.text).bitLength() < 32 }?
-  | 'null'
+  : booleanLiteral													#BoolLit
+  | NUM	{ new java.math.BigInteger($NUM.text).bitLength() < 32 }?   #IntLit
+  |	'null'															#NullLit
   ;
   
 booleanLiteral
-  : 'true' | 'false'
+  : bool='true' 		#TrueLiteral
+  | 'false'				#FalseLiteral
   ;
   
 unaryExp
-  : unaryOp exp
+  : op=unaryOp e2=exp
   ;
   
 unaryOp
@@ -168,7 +170,7 @@ unaryOp
   ;
   
 binaryExp
-  : binaryOp exp
+  : op=binaryOp e2=exp
   ;
   
 binaryOp
@@ -181,7 +183,7 @@ parenExp
   ;
   
 invokeExp
-  : ( ID '.' )? ID '(' args? ')'
+  : ( id1=ID '.' )? id2=ID '(' args? ')'
   ;
   
 args
@@ -193,13 +195,13 @@ varRef
   ;
   
 condExp
-  : '?' exp ':' exp
+  : '?' e1=exp ':' e2=exp
   ;
   
 newExp
-  : 'new' ID '(' ')'
-  | 'new' type '[' exp ']'
-  | 'new' type '[' ']' arrayInit
+  : 'new' ID '(' ')'				 #NewExpID
+  | 'new' t=type '[' e1=exp ']'		 #NewExpArr
+  | 'new' t=type '[' ']' e1=arrayInit#NewExprArrInit
   ;
  
 arrayInit
@@ -211,7 +213,7 @@ fieldAccessExp
   ;
   
 arrayAccessExp
-  : '[' exp ']'
+  : '[' index=exp ']'
   ;
   
 ID
@@ -222,10 +224,6 @@ NUM
 : '0' | ('1'..'9') ('0'..'9')* 
 ;
 
-
-invoke
-  : (ID '.' )? ID '(' args? ')'
-  ;
 
 // Whitespace -- ignored
 WS
