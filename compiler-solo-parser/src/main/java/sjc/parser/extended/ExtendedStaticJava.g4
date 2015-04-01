@@ -139,14 +139,16 @@ doWhileStatement
   
 exp
   : literalExp					#LitExpr
-  | unaryExp					#UnaryExpr
-  | exp binaryExp			#BinaryExpr
+  | exp arrayAccessExp			#ArrayAccessr
+  | exp fieldAccessExp			#FieldAccessr
   | parenExp					#ParenExpr
+  | op=unaryOp e2=exp					#UnaryExpr
+  | e1=exp op=binaryOp e2=exp			    #BinaryExpr
+  | e1=exp op=binaryOp2 e2=exp				#BinaryExp
+  | e1=exp op=binaryLogical e2=exp				#BinaryExp2
   | invokeExp					#InvokeExpr
   | varRef						#VarRefr
   | newExp						#NewExpr
-  | exp arrayAccessExp			#ArrayAccessr
-  | exp fieldAccessExp			#FieldAccessr
   | exp condExp					#CondExpr
   ;
   
@@ -169,14 +171,18 @@ unaryOp
   : '+' | '-' | '!' | '~'
   ;
   
-binaryExp
-  : op=binaryOp e2=exp
-  ;
   
 binaryOp
-  : '+' | '-' | '*' | '/' | '%' | '>' | '>=' | '==' 
-  | '<' | '<=' | '!=' | '&&' | '||' | '<<' | '>>' | '>>>'
+  :  '*' | '/' | '%' | '+' | '-' | '<<' | '>>' | '>>>' 
   ;
+  
+binaryOp2
+: '<' | '<=' | '>' | '>=' | '==' | '!=' 
+;
+
+binaryLogical
+: '&&' | '||' 
+;
   
 parenExp
   : '(' exp ')'

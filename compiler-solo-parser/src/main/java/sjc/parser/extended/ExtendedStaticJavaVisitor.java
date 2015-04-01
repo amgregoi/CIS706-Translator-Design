@@ -121,18 +121,19 @@ public interface ExtendedStaticJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitBinaryOp(@NotNull ExtendedStaticJavaParser.BinaryOpContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#binaryExp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitBinaryExp(@NotNull ExtendedStaticJavaParser.BinaryExpContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code IDExp}
 	 * labeled alternative in {@link ExtendedStaticJavaParser#lhs}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitIDExp(@NotNull ExtendedStaticJavaParser.IDExpContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BinaryExp2}
+	 * labeled alternative in {@link ExtendedStaticJavaParser#exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryExp2(@NotNull ExtendedStaticJavaParser.BinaryExp2Context ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#params}.
 	 * @param ctx the parse tree
@@ -159,6 +160,12 @@ public interface ExtendedStaticJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitVarRefr(@NotNull ExtendedStaticJavaParser.VarRefrContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#binaryOp2}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryOp2(@NotNull ExtendedStaticJavaParser.BinaryOp2Context ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#compilationUnit}.
 	 * @param ctx the parse tree
@@ -261,6 +268,13 @@ public interface ExtendedStaticJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitReturnStatement(@NotNull ExtendedStaticJavaParser.ReturnStatementContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code BinaryExp}
+	 * labeled alternative in {@link ExtendedStaticJavaParser#exp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryExp(@NotNull ExtendedStaticJavaParser.BinaryExpContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code CondExpr}
 	 * labeled alternative in {@link ExtendedStaticJavaParser#exp}.
@@ -366,6 +380,12 @@ public interface ExtendedStaticJavaVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitInvokeExp(@NotNull ExtendedStaticJavaParser.InvokeExpContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#binaryLogical}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBinaryLogical(@NotNull ExtendedStaticJavaParser.BinaryLogicalContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link ExtendedStaticJavaParser#simpleClassDeclaration}.
 	 * @param ctx the parse tree

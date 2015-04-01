@@ -48,6 +48,7 @@ import sjc.parser.extended.ExtendedStaticJavaParser.ArrayAccessrContext;
 import sjc.parser.extended.ExtendedStaticJavaParser.ArrayInitContext;
 import sjc.parser.extended.ExtendedStaticJavaParser.AssignContext;
 import sjc.parser.extended.ExtendedStaticJavaParser.AssignStatementContext;
+import sjc.parser.extended.ExtendedStaticJavaParser.BinaryExp2Context;
 import sjc.parser.extended.ExtendedStaticJavaParser.BinaryExpContext;
 import sjc.parser.extended.ExtendedStaticJavaParser.BinaryExprContext;
 import sjc.parser.extended.ExtendedStaticJavaParser.BooleanTypeContext;
@@ -74,6 +75,7 @@ import sjc.parser.extended.ExtendedStaticJavaParser.PublicFieldDeclarationContex
 import sjc.parser.extended.ExtendedStaticJavaParser.SimpleClassDeclarationContext;
 import sjc.parser.extended.ExtendedStaticJavaParser.TrueLiteralContext;
 import sjc.parser.extended.ExtendedStaticJavaParser.TypeContext;
+import sjc.parser.extended.ExtendedStaticJavaParser.UnaryExprContext;
 import sjc.parser.extended.ExtendedStaticJavaParser.VarRefContext;
 import sjc.parser.extended.ExtendedStaticJavaParser.IfStatementContext;
 import sjc.parser.extended.ExtendedStaticJavaParser.IntTypeContext;
@@ -196,17 +198,28 @@ public class ExtendedStaticJavaASTBuilder extends
 	@Override
 	public InfixExpression visitBinaryExp(final BinaryExpContext ctx) {
 		final InfixExpression result = this.ast.newInfixExpression();
-
-		//result.setLeftOperand(this.<Expression> build(ctx.));
-
+		result.setLeftOperand(this.<Expression> build(ctx.e1));
+		
+		
 		result.setOperator(ExtendedStaticJavaASTBuilder.binopMap.get(ctx
-				.binaryOp().getText()));
+				.op.getText()));
 
 		result.setRightOperand(this.<Expression> build(ctx.e2));
-
 		return result;
 	}
 
+	@Override
+	public InfixExpression visitBinaryExp2(final BinaryExp2Context ctx) {
+		final InfixExpression result = this.ast.newInfixExpression();
+		result.setLeftOperand(this.<Expression> build(ctx.e1));
+		
+		
+		result.setOperator(ExtendedStaticJavaASTBuilder.binopMap.get(ctx
+				.op.getText()));
+
+		result.setRightOperand(this.<Expression> build(ctx.e2));
+		return result;
+	}
 
 	@Override
 	public PrimitiveType visitBooleanType(final BooleanTypeContext ctx) {
@@ -448,7 +461,7 @@ public class ExtendedStaticJavaASTBuilder extends
 	
 	
 	@Override
-	public PrefixExpression visitUnaryExp(final UnaryExpContext ctx) {
+	public PrefixExpression visitUnaryExpr(final UnaryExprContext ctx) {
 		final PrefixExpression result = this.ast.newPrefixExpression();
 
 		result.setOperator(ExtendedStaticJavaASTBuilder.unopMap.get(ctx
@@ -662,12 +675,19 @@ public class ExtendedStaticJavaASTBuilder extends
 	{
 		  return this.ast.newBooleanLiteral(false);
 	}
+	//TODO
 	//MINE
 	@Override
 	public InfixExpression visitBinaryExpr(final BinaryExprContext ctx)
 	{
-		final InfixExpression result = this.visitBinaryExp(ctx.binaryExp());
-		result.setLeftOperand(this.<Expression> build(ctx.exp()));
+		final InfixExpression result = this.ast.newInfixExpression();
+		result.setLeftOperand(this.<Expression> build(ctx.e1));
+		
+		
+		result.setOperator(ExtendedStaticJavaASTBuilder.binopMap.get(ctx
+				.binaryOp().getText()));
+
+		result.setRightOperand(this.<Expression> build(ctx.e2));
 		return result;
 	}
 	
