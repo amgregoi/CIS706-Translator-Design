@@ -502,5 +502,79 @@ public class ExtendedByteCodeGeneratorTest {
   public void testWhile() {
     testPass("While.java");
   }
+  
+  /*
+   * My 14 additional test cases
+   */
+  @Test
+  public void testQueueMillions() {
+    testPass("myQueueMillions.java");
+  }
+  
+  @Test
+  public void testLinkedListMillions() {
+    testPass("myLinkedListReverse.java");
+  }
+  
+  @Test
+  public void testArrayHeapsortMillions() {
+    testPass("myArrayHeapsortMillions.java");
+  }
+  
+  @Test
+  public void testStackMillions() {
+    testPass("myStackMillions.java");
+  }
+  
+  @Test
+  public void testBinaryTree() {
+    testPass("myBinaryTree.java");
+  }
+  
+  @Test
+  public void testSimpleObject() {
+    testPass("mySimpleObjectManipulation.java");
+  }
 
+  @Test
+  public void testPythagoreanTriplets() {
+    testPass("myPythagoreanTriplets.java");
+  }
+  
+  @Test
+  public void testArrayBubbleSort() {
+    testPass("myArrayBubbleSort.java");
+  }
+  
+  @Test
+  public void testFindNthPrimeNumber() {
+    testPass("myFindPrimeNumber.java");
+  }
+  
+  @Test
+  public void testArrayReverse() {
+    testPass("myArrayReverse.java");
+  }
+  
+  @Test
+  public void testFibonacciFinder() {
+    testPass("myFibonacci.java");
+  }
+  
+  @Test
+  public void testCollatzList() {
+    testPass("myCollatzList.java");
+  }
+  
+  @Test
+  public void testArbitraryBoolArrayInit() {
+    testPass("myArbitraryBooleanArrayInit.java");
+  }
+  
+  @Test
+  public void testArrayPalindrome() {
+    testPass("myArrayPalindrome.java");
+  }
+  
+  
 }
